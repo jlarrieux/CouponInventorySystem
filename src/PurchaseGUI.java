@@ -19,7 +19,8 @@ public class PurchaseGUI extends JFrame {
     private void init(){
         labelConstructor();
         textFieldConstructor();
-        JPanel field = new JPanel(new GridLayout(2,5));
+        JPanel field = new JPanel(new GridLayout(2,5,25,10));
+        field.setBorder(BorderFactory.createEmptyBorder(50,50,50,50));
 
         field.add(couponProviderNameLabel);
         field.add(ProductNameLabel);
@@ -50,7 +51,8 @@ public class PurchaseGUI extends JFrame {
     }
 
     private void textFieldConstructor(){
-        couponProviderNameTextField = new JTextField();
+        couponProviderNameTextField = new JTextField(20);
+        couponProviderNameTextField.setDocument(new JTextFieldLimiter(2));
         productNameTextField = new JTextField();
         priceTextField = new JTextField();
         discountRateTextField = new JTextField();
