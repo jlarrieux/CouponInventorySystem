@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -84,27 +85,27 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
         icons.put(DESCENDING, MyLauncher.createImageIcon("images/descending_sort.png", DESCENDING));
         icons.put(ASCENDING, MyLauncher.createImageIcon("images/ascending_sort.jpg", ASCENDING));
 
-        couponProvideComboBoxSort = new JComboBox(new Object[]{" ", DESCENDING, ASCENDING});
+        couponProvideComboBoxSort = new JComboBox(new Object[]{" ", ASCENDING});
         couponProvideComboBoxSort.setRenderer(new IconListRenderer(icons));
         couponProvideComboBoxSort.addItemListener(this);
 
-        productNameComboBoxSort = new JComboBox(new Object[]{" ", DESCENDING, ASCENDING});
+        productNameComboBoxSort = new JComboBox(new Object[]{" ",  ASCENDING});
         productNameComboBoxSort.setRenderer(new IconListRenderer(icons));
         productNameComboBoxSort.addItemListener(this);
 
-        priceComboBoxSort = new JComboBox(new Object[]{" ", DESCENDING, ASCENDING});
+        priceComboBoxSort = new JComboBox(new Object[]{" ", ASCENDING});
         priceComboBoxSort.setRenderer(new IconListRenderer(icons));
         priceComboBoxSort.addItemListener(this);
 
-        discountRateComboBoxSort = new JComboBox(new Object[]{" ", DESCENDING, ASCENDING});
+        discountRateComboBoxSort = new JComboBox(new Object[]{" ", ASCENDING});
         discountRateComboBoxSort.setRenderer(new IconListRenderer(icons));
         discountRateComboBoxSort.addItemListener(this);
 
-        expirationDateComboBoxSort = new JComboBox(new Object[]{" ", DESCENDING, ASCENDING});
+        expirationDateComboBoxSort = new JComboBox(new Object[]{" ", ASCENDING});
         expirationDateComboBoxSort.setRenderer(new IconListRenderer(icons));
         expirationDateComboBoxSort.addItemListener(this);
 
-        finalPriceComboBoxSort = new JComboBox(new Object[]{" ", DESCENDING, ASCENDING});
+        finalPriceComboBoxSort = new JComboBox(new Object[]{" ", ASCENDING});
         finalPriceComboBoxSort.setRenderer(new IconListRenderer(icons));
         finalPriceComboBoxSort.addItemListener(this);
     }
@@ -161,10 +162,10 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
 
         productNameListModel.addElement(coupon.getProductName());
         priceListModel.addElement(currency.format(coupon.getPrice()));
-        discountRateListModel.addElement(percent.format(coupon.getDiscountRate()));
+        discountRateListModel.addElement(percent.format(coupon.getDiscountRate()/100));
         expirationDateListModel.addElement(coupon.getExpirationDate());
-        double finalPrice = coupon.getPrice() * (1 - (coupon.getDiscountRate() / 100));
-        finalPriceListModel.addElement(currency.format(finalPrice));
+//        double finalPrice = coupon.getPrice() * (1 - (coupon.getDiscountRate() / 100));
+        finalPriceListModel.addElement(currency.format(coupon.getFinalPrice()));
 
     }
 
@@ -203,7 +204,9 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
     @Override
     public void itemStateChanged(ItemEvent e) {
         Object source = e.getSource();
-        System.out.printf("\n\nID: %d\tGetItem: %s\tState: %d\n", e.getID(), e.getItem().toString(), e.getStateChange());
+//        System.out.printf("Component index: %d\n", getComponentIndex((Component) source));
+        test();
+
         if (source instanceof JComboBox) {
             deselectAllOtherComboBox((JComboBox) source);
             sortedList.clear();
@@ -217,11 +220,11 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
             boolean result=true;
             if(e.getStateChange()==1 && (e.getItem().toString().equals(DESCENDING) || e.getItem().toString().equals(ASCENDING)) && MyLauncher.masterList.getCursor()!=null) {
                 System.out.println("Goint ahead!");
-//                System.out.printf("couponProviderListModel:")
+
                 while (result) {
                    System.out.printf("Current value: %s\t\n", ((Coupon) MyLauncher.masterList.getCursor()).getCouponProviderName());
                     coupon = (Coupon) MyLauncher.masterList.getCursor();
-                    coupon.setMethodNameToIterate("getCouponProviderName");
+                    coupon.setMethodNameToIterate(selectMethod(getComponentIndex((Component) source)));
                     try {
                         sortedList.insert(coupon);
                     } catch (InvocationTargetException e1) {
@@ -250,7 +253,55 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
     }
 
 
+    private int getComponentIndex(Component component){
+        if(component!=null) {
+            Container container = component.getParent();
+            for(int i=0; i<container.getComponentCount(); i++){
+                if(container.getComponent(i)==component) return i;
+            }
+        }
+
+        return -1;
+    }
 
 
+
+    private void test(){
+        Method[] methods = Coupon.class.getDeclaredMethods();
+        for(int i=0; i< methods.length; i++){
+            System.out.printf("metor[%d]: %s\n", i, methods[i].getName());
+        }
+    }
+
+
+    private String selectMethod(int componentIndex){
+       String s="";
+        switch (componentIndex){
+            case 6: s= "getCouponProviderName";
+                    break;
+
+            case 7: s= "getProductName";
+                break;
+
+            case 8: s= "getPrice";
+                break;
+
+            case 9: s= "getDiscountRate";
+                break;
+
+            case 10: s= "getExpirationDate";
+                break;
+
+            case 11: s= "getFinalPrice";
+                break;
+
+
+            case 12: s = "getStatus";
+                        break;
+        }
+
+        System.out.printf("Returning method: %s\twith index fo component: %d\n\n",s, componentIndex);
+        return s;
+    }
 
 }

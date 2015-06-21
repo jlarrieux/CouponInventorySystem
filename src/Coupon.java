@@ -79,7 +79,9 @@ public class Coupon implements Comparable {
         return status;
     }
 
-
+    public Double getFinalPrice(){
+      return  getPrice() * (1 - (getDiscountRate() / 100));
+    }
 
 
     @Override

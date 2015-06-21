@@ -33,13 +33,15 @@ public class SortedList<T extends Comparable<T>> extends UnsortedList<T> impleme
 //            System.out.printf("\n\n\nElement Class: %s\n\n\n",element.getClass().toString());
 
             if(element instanceof Coupon){
-                Method method = Coupon.class.getMethod(((Coupon) element).getMethodNameToIterate(),null);
+                System.out.printf("About to get method %s\n", ((Coupon) element).getMethodNameToIterate());
+                Method method = Coupon.class.getMethod(((Coupon) element).getMethodNameToIterate());
 
                 Object objNew = method.invoke(element);
                 Object objCurrent = method.invoke(currentElement);
 
                 if(objCurrent instanceof String) comp = ((String)objCurrent).compareTo((String)objNew);
                 else if(objCurrent instanceof Integer) comp = Integer.compare((Integer)objCurrent,(Integer) objNew);
+                else if(objCurrent instanceof Double) comp = Double.compare((Double ) objCurrent, (Double)objNew);
                 System.out.printf("\n\nObjNew: %s\tObjCurrent: %s\tcomp: %d\n\n", String.valueOf(objNew), String.valueOf(objCurrent), comp);
 
             }
