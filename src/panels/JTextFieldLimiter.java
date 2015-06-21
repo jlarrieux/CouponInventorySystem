@@ -1,3 +1,5 @@
+package com.jeannius.cs401.project.panels;
+
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
@@ -7,7 +9,7 @@ import javax.swing.text.PlainDocument;
 public class JTextFieldLimiter extends PlainDocument {
     private int limit;
 
-    JTextFieldLimiter(int limit) {
+    public JTextFieldLimiter(int limit) {
         super();
         this.limit = limit;
     }
