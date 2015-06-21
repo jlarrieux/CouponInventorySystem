@@ -14,7 +14,7 @@ import java.net.URL;
 public class MyLauncher {
 
 
-    public static final String SEARCH_STRING ="Search", PURCHASE_STRING="Purchase", LIST_STRING ="List";
+    public static final String SEARCH_STRING ="Search", PURCHASE_STRING="Purchase", LIST_STRING ="List", PROGRAM_NAME="Coupon Inventory System by Jeanius INC.";
     public static void main(String[] arg){
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -29,7 +29,7 @@ public class MyLauncher {
 
     private static void createAndShowGUI() {
 
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame(PROGRAM_NAME);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JTabbedPane tabbedPane = new JTabbedPane();
