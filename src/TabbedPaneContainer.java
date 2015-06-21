@@ -9,18 +9,22 @@ import java.net.URL;
  */
 public class TabbedPaneContainer extends JPanel {
 
-    public static final String SEARCH_STRING ="Search", PURCHASE_STRING="Purchase", LIST_STRING ="List";
 
-    public TabbedPaneContainer(){
-        super(new GridLayout(1,1));
+    public static final String SEARCH_STRING = "Search", PURCHASE_STRING = "Purchase", LIST_STRING = "List";
+
+
+    public TabbedPaneContainer() {
+        super(new GridLayout(1, 1));
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
             public void run() {
                 init();
             }
         });
     }
 
-    private void init(){
+
+    private void init() {
         JTabbedPane tabbedPane = new JTabbedPane();
         ImageIcon searchIcon = createImageIcon("images/search_icon.png", "Search Icon");
         ImageIcon purchaseIcon = createImageIcon("images/buy_icon.png", "Buy Icon");
@@ -31,26 +35,27 @@ public class TabbedPaneContainer extends JPanel {
         JComponent listPanel = makeTextPanel(LIST_STRING);
 
 
-        tabbedPane.addTab(SEARCH_STRING, searchIcon,searchPanel,"S.TE.ER.");
-        tabbedPane.addTab(PURCHASE_STRING,purchaseIcon,purchasePanel,"rrrrr");
+        tabbedPane.addTab(SEARCH_STRING, searchIcon, searchPanel, "S.TE.ER.");
+        tabbedPane.addTab(PURCHASE_STRING, purchaseIcon, purchasePanel, "rrrrr");
 
     }
 
 
-    protected ImageIcon createImageIcon(String path, String description){
-        URL imgURL =getClass().getResource(path);
-        if(imgURL !=null) return new ImageIcon(imgURL, description);
-        else{
+    protected ImageIcon createImageIcon(String path, String description) {
+        URL imgURL = getClass().getResource(path);
+        if (imgURL != null) return new ImageIcon(imgURL, description);
+        else {
             //todo add system error path not found
             return null;
         }
     }
 
-    protected JComponent makeTextPanel(String text){
+
+    protected JComponent makeTextPanel(String text) {
         JPanel panel = new JPanel(new FlowLayout());
         JLabel filler = new JLabel(text);
         filler.setHorizontalAlignment(JLabel.CENTER);
-        panel.setLayout(new GridLayout(1,1));
+        panel.setLayout(new GridLayout(1, 1));
         panel.add(filler);
         return panel;
     }

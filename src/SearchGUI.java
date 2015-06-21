@@ -1,4 +1,4 @@
-package com.jeannius.cs401.project.panels;
+package com.jeannius.cs401.project;
 
 import javax.swing.*;
 

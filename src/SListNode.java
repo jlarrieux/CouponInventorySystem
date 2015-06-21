@@ -16,7 +16,7 @@ class SListNode<T> {
 
 
     // Data members
-    private T element ;         // List element
+    private T element;         // List element
     private SListNode next;         // Reference to the next element
 
 
