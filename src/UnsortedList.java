@@ -27,6 +27,7 @@ class UnsortedList<T> implements List<T> {
             locationOfFound, //location of where the search found the item
             previousLocation; // node before the cursor
     protected int numberOfElements=0;
+     public int indexOfFound=0;
     protected boolean found;
     protected java.util.List<ListUpdateListener> listeners = new ArrayList<>();
 
@@ -100,7 +101,7 @@ class UnsortedList<T> implements List<T> {
                 SListNode toInsert = new SListNode(newElement, cursor.getNext());
                 cursor.setNext(toInsert);
                 cursor = toInsert;
-                System.out.printf("NOT NULL!!! Cursor: %s\t Head: %s\n", ((Coupon)cursor.getElement()).getCouponProviderName(), ((Coupon)head.getElement()).getCouponProviderName());
+//                System.out.printf("NOT NULL!!! Cursor: %s\t Head: %s\n", ((Coupon)cursor.getElement()).getCouponProviderName(), ((Coupon)head.getElement()).getCouponProviderName());
             }
             numberOfElements++;
             notifyListeners();
@@ -219,30 +220,83 @@ class UnsortedList<T> implements List<T> {
     }
 
     public void notifyListeners(){
-//        System.out.println("REF UNSORT NOTIFY OTHERS");
+        System.out.println("REF UNSORT NOTIFY OTHERS");
         for(ListUpdateListener listUpdateListener : listeners) listUpdateListener.listHasBeenUpdated(this);
 //        showStructure();
     }
 
     public boolean contains(T element) {
-//        todo add empty list case
+    if(isEmpty()) MyLauncher.Showdialog("List is Empty");
         find(element);
         return found;
     }
-
-
+//
+//
     protected void find(T target) {
         locationOfFound = head;
+    System.out.println("finding");
         while (locationOfFound != null) {
-            if (locationOfFound.getElement().equals(target)) {
+            System.out.printf("Provider current: %s\tProvider target: %s\n",((Coupon)locationOfFound.getElement()).getCouponProviderName(), ((Coupon) target).getCouponProviderName() );
+            if (checkCouponEquality((Coupon) target, (Coupon)locationOfFound.getElement())) {
                 found = true;
-                return;
+                return ;
             } else {
                 previousLocation = locationOfFound;
                 locationOfFound = locationOfFound.getNext();
             }
+            indexOfFound++;
         }
     }
+
+
+    private boolean checkCouponEquality(Coupon target, Coupon current){
+        System.out.println("RUNNIG COUPON CHECK!");
+        boolean providerMatch, productMatch, priceMatch, discountMatch,expirationDateMatch, couponStatusMatch;
+
+        providerMatch =checkProviderNameMatch(target, current);
+        productMatch =checkProductNameMatch(target, current);
+        priceMatch = checkPriceMatch(target, current);
+        discountMatch = checkDiscountRateMatch(target, current);
+        expirationDateMatch = checkExpirationDateMatch(target,current);
+        couponStatusMatch =  checkCouponStatusMatch(target,current);
+        System.out.printf("Provider: %b, Product: %b, Price: %b, discount: %b, expiration: %b, status: %b\n\n",
+                                providerMatch,productMatch,priceMatch,discountMatch,expirationDateMatch,couponStatusMatch);
+
+
+        if( providerMatch && productMatch && priceMatch && discountMatch && expirationDateMatch && couponStatusMatch){
+            return true;
+        }
+        else return false;
+
+
+    }
+
+    private boolean checkProviderNameMatch(Coupon target, Coupon current){
+        return target.getCouponProviderName().equals(current.getCouponProviderName());
+    }
+
+    private boolean checkProductNameMatch(Coupon target, Coupon current){
+        return target.getProductName().equals(current.getProductName());
+    }
+
+    private boolean checkPriceMatch(Coupon target, Coupon current){
+        return target.getPrice().compareTo(current.getPrice()) ==0;
+    }
+
+    private boolean checkDiscountRateMatch(Coupon target, Coupon current){
+        System.out.printf("Target discount rate: %f\tCurrent discount Rate: %f\n", target.getDiscountRate(), current.getDiscountRate());
+        return target.getDiscountRate().compareTo(current.getDiscountRate())==0;
+    }
+
+    private boolean checkExpirationDateMatch(Coupon target, Coupon current){
+        return target.getExpirationDate().compareTo(current.getExpirationDate())==0;
+    }
+
+    private boolean checkCouponStatusMatch(Coupon target, Coupon current){
+        return target.getStatus()==current.getStatus();
+    }
+
+
 
 
     public void addListener(ListUpdateListener toAdd){
@@ -287,9 +341,6 @@ class UnsortedList<T> implements List<T> {
 
             if(head.getElement() instanceof Coupon) System.out.printf("Cursor: %s\t Head: %s\n", ((Coupon)cursor.getElement()).getCouponProviderName(), ((Coupon)head.getElement()).getCouponProviderName());
             else  System.out.printf("\tEND\nCurrent cursor value: %s\n", String.valueOf(cursor.getElement()));
-//            System.out.printf("Cursor: %s\t Head: %s\n", ((Coupon)cursor.getElement()).getCouponProviderName(), ((Coupon)head.getElement()).getCouponProviderName());
-
-
         }
 
     }

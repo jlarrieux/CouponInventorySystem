@@ -9,8 +9,8 @@ public class Coupon implements Comparable {
     private String couponProviderName, productName, methodNameToIterate;
     private Double price, discountRate;
     private Integer expirationDate;
-    private CouponStatus status;
-
+    private String status;
+    public static String REDEEMED ="Redeemed", UNUSED="Unused";
 
     public Coupon() {
 
@@ -42,7 +42,8 @@ public class Coupon implements Comparable {
     }
 
 
-    public void setCouponStatus(CouponStatus status) {
+    public void setCouponStatus(String status) {
+        System.out.println("\n"+status+"\n");
         this.status = status;
     }
 
@@ -75,7 +76,7 @@ public class Coupon implements Comparable {
         return methodNameToIterate;
     }
 
-    public CouponStatus getStatus(){
+    public String getStatus(){
         return status;
     }
 

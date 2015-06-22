@@ -24,10 +24,10 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
 
 
     private static final String DESCENDING = "Descending", ASCENDING = "Ascending";
-    JComboBox couponProvideComboBoxSort, productNameComboBoxSort, priceComboBoxSort, discountRateComboBoxSort, expirationDateComboBoxSort, finalPriceComboBoxSort;
-    JList couponProviderList, productNameList, priceList, discountRateList, expirationDateList, finalPriceList;
-    JLabel finalPriceLabel;
-    private DefaultListModel couponProviderListModel, productNameListModel, priceListModel, discountRateListModel, expirationDateListModel, finalPriceListModel;
+    JComboBox couponProvideComboBoxSort, productNameComboBoxSort, priceComboBoxSort, discountRateComboBoxSort, expirationDateComboBoxSort, finalPriceComboBoxSort, couponStatusComboBoxSort;
+    JList couponProviderList, productNameList, priceList, discountRateList, expirationDateList, finalPriceList, couponStatusList;
+    JLabel finalPriceLabel, couponStatusLabel;
+    private DefaultListModel couponProviderListModel, productNameListModel, priceListModel, discountRateListModel, expirationDateListModel, finalPriceListModel, couponStatusModel;
     SortedList sortedList;
 
 
@@ -44,11 +44,14 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
         super.init();
         listModelConstructor();
 //        couponList = new ArrayList<>();
+        GUIPanel.masterList2.addListener(this);
 
         sortedList = new SortedList();
         sortedList.addListener(this);
-        fieldPanel.setLayout(new GridLayout(3, 6, 25, 10));
+        fieldPanel.setLayout(new GridLayout(3, 7, 25, 10));
         fieldPanel.add(finalPriceLabel);
+        fieldPanel.add(couponStatusLabel);
+
         comboBoxConstructor();
         fieldPanel.add(couponProvideComboBoxSort);
         fieldPanel.add(productNameComboBoxSort);
@@ -56,6 +59,7 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
         fieldPanel.add(discountRateComboBoxSort);
         fieldPanel.add(expirationDateComboBoxSort);
         fieldPanel.add(finalPriceComboBoxSort);
+        fieldPanel.add(couponStatusComboBoxSort);
 
         listConstructor();
         fieldPanel.add(couponProviderList);
@@ -64,8 +68,11 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
         fieldPanel.add(discountRateList);
         fieldPanel.add(expirationDateList);
         fieldPanel.add(finalPriceList);
+        fieldPanel.add(couponStatusList);
 
         add(fieldPanel);
+        iterRatePopulation(GUIPanel.masterList2);
+        GUIPanel.masterList2.showStructure();
 
     }
 
@@ -75,6 +82,9 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
         super.labelConstructor();
         finalPriceLabel = new JLabel("Final Price");
         finalPriceLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        couponStatusLabel = new JLabel("Coupon Status");
+        couponStatusLabel.setHorizontalAlignment(JLabel.CENTER);
     }
 
 
@@ -108,6 +118,10 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
         finalPriceComboBoxSort = new JComboBox(new Object[]{" ", ASCENDING});
         finalPriceComboBoxSort.setRenderer(new IconListRenderer(icons));
         finalPriceComboBoxSort.addItemListener(this);
+
+        couponStatusComboBoxSort = new JComboBox(new Object[]{" ", ASCENDING});
+        couponStatusComboBoxSort.setRenderer(new IconListRenderer(icons));
+        couponStatusComboBoxSort.addItemListener(this);
     }
 
 
@@ -118,6 +132,7 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
         discountRateListModel = new DefaultListModel();
         expirationDateListModel = new DefaultListModel();
         finalPriceListModel = new DefaultListModel();
+        couponStatusModel = new DefaultListModel();
     }
 
 
@@ -128,6 +143,7 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
         discountRateList = new JList(discountRateListModel);
         expirationDateList = new JList(expirationDateListModel);
         finalPriceList = new JList(finalPriceListModel);
+        couponStatusList = new JList(couponStatusModel);
 
     }
 
@@ -136,6 +152,7 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
 
 
     private void iterRatePopulation(List list) {
+        System.out.println("ITERATING THROUGH POPULATION");
         clearListModel();
         boolean result= true;
         if (list.size() > 0) {
@@ -156,7 +173,7 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
 
         NumberFormat currency = NumberFormat.getCurrencyInstance();
         NumberFormat percent = NumberFormat.getPercentInstance();
-//        couponList.add(coupon);
+
 
         couponProviderListModel.addElement(coupon.getCouponProviderName());
 
@@ -164,8 +181,9 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
         priceListModel.addElement(currency.format(coupon.getPrice()));
         discountRateListModel.addElement(percent.format(coupon.getDiscountRate()/100));
         expirationDateListModel.addElement(coupon.getExpirationDate());
-//        double finalPrice = coupon.getPrice() * (1 - (coupon.getDiscountRate() / 100));
+
         finalPriceListModel.addElement(currency.format(coupon.getFinalPrice()));
+        couponStatusModel.addElement(coupon.getStatus());
 
     }
 
@@ -177,6 +195,7 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
         discountRateListModel.removeAllElements();
         expirationDateListModel.removeAllElements();
         finalPriceListModel.removeAllElements();
+        couponStatusModel.removeAllElements();
 //        couponList.clear();
 
     }
@@ -205,25 +224,25 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
     public void itemStateChanged(ItemEvent e) {
         Object source = e.getSource();
 //        System.out.printf("Component index: %d\n", getComponentIndex((Component) source));
-        test();
+//        test();
 
         if (source instanceof JComboBox) {
             deselectAllOtherComboBox((JComboBox) source);
             sortedList.clear();
             clearListModel();
-            MyLauncher.masterList.gotoBeginning();
+            GUIPanel.masterList2.gotoBeginning();
 
 
 
-            MyLauncher.masterList.gotoBeginning();
+            GUIPanel.masterList2.gotoBeginning();
             Coupon coupon = null;
             boolean result=true;
-            if(e.getStateChange()==1 && (e.getItem().toString().equals(DESCENDING) || e.getItem().toString().equals(ASCENDING)) && MyLauncher.masterList.getCursor()!=null) {
+            if(e.getStateChange()==1 && (e.getItem().toString().equals(DESCENDING) || e.getItem().toString().equals(ASCENDING)) && GUIPanel.masterList2.getCursor()!=null) {
                 System.out.println("Goint ahead!");
 
                 while (result) {
-                   System.out.printf("Current value: %s\t\n", ((Coupon) MyLauncher.masterList.getCursor()).getCouponProviderName());
-                    coupon = (Coupon) MyLauncher.masterList.getCursor();
+                   System.out.printf("Current value: %s\t\n", ((Coupon) GUIPanel.masterList2.getCursor()).getCouponProviderName());
+                    coupon = (Coupon) GUIPanel.masterList2.getCursor();
                     coupon.setMethodNameToIterate(selectMethod(getComponentIndex((Component) source)));
                     try {
                         sortedList.insert(coupon);
@@ -235,7 +254,7 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
                         e1.printStackTrace();
                     }
 
-                    result = MyLauncher.masterList.gotoNext();
+                    result = GUIPanel.masterList2.gotoNext();
                     System.out.println("Result: " + result);
 
                 }
@@ -248,7 +267,7 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
 
     @Override
     public void listHasBeenUpdated(List list) {
-
+        System.out.println("List has been updated");
         iterRatePopulation(list);
     }
 
@@ -277,26 +296,26 @@ public class ListGUI<T> extends GUIPanel implements ListUpdateListener, ItemList
     private String selectMethod(int componentIndex){
        String s="";
         switch (componentIndex){
-            case 6: s= "getCouponProviderName";
+            case 7: s= "getCouponProviderName";
                     break;
 
-            case 7: s= "getProductName";
+            case 8: s= "getProductName";
                 break;
 
-            case 8: s= "getPrice";
+            case 9: s= "getPrice";
                 break;
 
-            case 9: s= "getDiscountRate";
+            case 10: s= "getDiscountRate";
                 break;
 
-            case 10: s= "getExpirationDate";
+            case 11: s= "getExpirationDate";
                 break;
 
-            case 11: s= "getFinalPrice";
+            case 12: s= "getFinalPrice";
                 break;
 
 
-            case 12: s = "getStatus";
+            case 13: s = "getStatus";
                         break;
         }
 

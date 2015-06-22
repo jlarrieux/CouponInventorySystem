@@ -23,6 +23,7 @@ public class PurchaseGUI<T> extends GUIPanel<T> implements ActionListener {
     public PurchaseGUI(int height, int width) {
         setPreferredSize(new Dimension(width, height));
         init();
+
     }
 
 
@@ -48,6 +49,7 @@ public class PurchaseGUI<T> extends GUIPanel<T> implements ActionListener {
         buttons.add(cancel);
 
         add(buttons);
+
 
     }
 
@@ -87,7 +89,7 @@ public class PurchaseGUI<T> extends GUIPanel<T> implements ActionListener {
                 System.out.println("PUR VAL");
 //                validateMyTextField(couponProviderNameTextField, Integer.class);
                 try {
-                    MyLauncher.masterList.insert(buyCoupon());
+                    GUIPanel.masterList2.insert(buyCoupon());
                 } catch (NoSuchMethodException e1) {
                     e1.printStackTrace();
                 } catch (InvocationTargetException e1) {
@@ -103,7 +105,9 @@ public class PurchaseGUI<T> extends GUIPanel<T> implements ActionListener {
     }
 
 
-    private void clearAll() {
+
+
+    protected void clearAll() {
         Component[] component = fieldPanel.getComponents();
         for (int i = 0; i < fieldPanel.getComponentCount(); i++) {
 
@@ -124,9 +128,12 @@ public class PurchaseGUI<T> extends GUIPanel<T> implements ActionListener {
         myCoupon.setPrice(Double.parseDouble(priceTextField.getText()));
         myCoupon.setDiscountRate(Double.parseDouble(discountRateTextField.getText()));
         myCoupon.setExpirationDate(Integer.parseInt(expirationDateTextfield.getText()));
-        myCoupon.setCouponStatus(CouponStatus.Unused);
+        myCoupon.setCouponStatus(Coupon.UNUSED);
 
 
         return myCoupon;
     }
+
+
+
 }
