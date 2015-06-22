@@ -9,9 +9,10 @@ import java.awt.*;
  */
 public class Validator<T> {
     JTextField currentTextField;
-    Class currentType;
+    Object currentType;
+    String error;
 
-    public Validator(JTextField jTextField, Class cl){
+    public Validator(JTextField jTextField, Object cl){
         this.currentTextField = jTextField;
         this.currentType = cl;
     }
@@ -25,16 +26,35 @@ public class Validator<T> {
             return true;
         }
 
+
         else return false;
 
+
+    }
+
+    private boolean lengthValidation(){
+        boolean test =  currentTextField.getText().length()==0;
+        if(test)error("No text");
+        return  test;
+    }
+
+    private boolean isNumericValidation(){
+        boolean test = false;
+        if(currentType instanceof  Double || currentType instanceof  Integer)test= !currentTextField.getText().matches("-?\\d+(\\.\\d+)?");
+        if(test) error("Not a number or digit!");
+        return test;
     }
 
 
     private void error(String text){
+        error = text;
         Border border = BorderFactory.createLineBorder(Color.red,2);
-        System.out.println("validating");
         currentTextField.setBorder(border);
+        System.out.println("validating");
+
     }
+
+
 
 
 

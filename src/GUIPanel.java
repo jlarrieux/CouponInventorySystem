@@ -17,6 +17,7 @@ public abstract class GUIPanel<T> extends JPanel {
     protected JPanel fieldPanel;
     JLabel couponProviderNameLabel, ProductNameLabel, priceLabel, discountRateLabel, expirationDateLabel;
     public static UnsortedList masterList2;
+    String errorlist="";
 
     protected void init() {
 
@@ -45,12 +46,19 @@ public abstract class GUIPanel<T> extends JPanel {
     }
 
 
-    protected boolean validateMyTextField(JTextField jTextField,Class c ){
-        Validator val = new Validator(jTextField,c);
-        val.validate();
+    protected boolean validateMyTextField(JTextField jTextField,Object type){
+        Validator val = new Validator(jTextField, type);
+        boolean isBad = val.validate();
 
-        return false;
+
+        System.out.printf("Validation of %s is %b \t with error: %s\n", jTextField.getName(),isBad,val.error );
+        if(isBad) errorlist = errorlist +"\n"+jTextField.getName()+"has the following error: "+ val.error;
+
+
+        return isBad;
     }
+
+
 
     public static void initializeList() throws IOException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         FileInputStream inFile;

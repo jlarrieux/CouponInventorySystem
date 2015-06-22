@@ -57,13 +57,19 @@ public class PurchaseGUI<T> extends GUIPanel<T> implements ActionListener {
     protected void textFieldConstructor() {
         couponProviderNameTextField = new JTextField(20);
         couponProviderNameTextField.setDocument(new JTextFieldLimiter(20));
+        couponProviderNameTextField.setName("Coupon Provider");
 
         productNameTextField = new JTextField(2);
         productNameTextField.setDocument(new JTextFieldLimiter(20));
+        productNameTextField.setName("Product Name");
 
         priceTextField = new JTextField();
+        priceTextField.setName("PRICE");
         discountRateTextField = new JTextField();
+        discountRateTextField.setName("Discount");
         expirationDateTextfield = new JTextField();
+        expirationDateTextfield.setName("Expiration");
+
 
     }
 
@@ -88,22 +94,43 @@ public class PurchaseGUI<T> extends GUIPanel<T> implements ActionListener {
         if (source instanceof JButton) {
             if (((JButton) source).getText().equals(CLEAR)) clearAll();
             else{
-                System.out.println("PUR VAL");
-//                validateMyTextField(couponProviderNameTextField, Integer.class);
-                try {
-                    GUIPanel.masterList2.insert(buyCoupon());
-                } catch (NoSuchMethodException e1) {
-                    e1.printStackTrace();
-                } catch (InvocationTargetException e1) {
-                    e1.printStackTrace();
-                } catch (IllegalAccessException e1) {
-                    e1.printStackTrace();
+
+
+
+                if(!checkInputError()) {
+                    try {
+                        GUIPanel.masterList2.insert(buyCoupon());
+                    } catch (NoSuchMethodException e1) {
+                        e1.printStackTrace();
+                    } catch (InvocationTargetException e1) {
+                        e1.printStackTrace();
+                    } catch (IllegalAccessException e1) {
+                        e1.printStackTrace();
+                    }
+                    clearAll();
                 }
-                clearAll();
+                else MyLauncher.Showdialog(errorlist);
+//                validateMyTextField
+
+
 
             }
         }
 
+    }
+
+    protected boolean checkInputError(){
+        errorlist="";
+        boolean productGood, providerGood, discountGood, priceGood, expirationDateGood;
+        providerGood= validateMyTextField(couponProviderNameTextField,null );
+        productGood=  validateMyTextField(productNameTextField, null);
+        discountGood = validateMyTextField(discountRateTextField, new Double(5));
+        expirationDateGood = validateMyTextField(expirationDateTextfield, new Integer(5));
+        priceGood = validateMyTextField(priceTextField,new Double(5));
+        boolean fin = providerGood || productGood || discountGood || expirationDateGood || priceGood;
+        System.out.println("Total eval: "+ fin );
+
+        return fin;
     }
 
 
