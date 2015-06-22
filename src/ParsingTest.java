@@ -45,7 +45,7 @@ public class ParsingTest {
         coupon.setPrice(Double.valueOf(coup[2]));
         coupon.setDiscountRate(Double.valueOf(coup[3]));
         coupon.setExpirationDate(Integer.valueOf(coup[4]));
-        coupon.setCouponStatus(coup[5]);
+        coupon.setCouponStatus(CouponStatus.valueOf(coup[5]));
 
         return coupon;
     }

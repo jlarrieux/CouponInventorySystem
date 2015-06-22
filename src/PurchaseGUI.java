@@ -54,11 +54,13 @@ public class PurchaseGUI<T> extends GUIPanel<T> implements ActionListener {
     }
 
 
-    private void textFieldConstructor() {
+    protected void textFieldConstructor() {
         couponProviderNameTextField = new JTextField(20);
         couponProviderNameTextField.setDocument(new JTextFieldLimiter(20));
 
-        productNameTextField = new JTextField();
+        productNameTextField = new JTextField(2);
+        productNameTextField.setDocument(new JTextFieldLimiter(20));
+
         priceTextField = new JTextField();
         discountRateTextField = new JTextField();
         expirationDateTextfield = new JTextField();
@@ -128,7 +130,7 @@ public class PurchaseGUI<T> extends GUIPanel<T> implements ActionListener {
         myCoupon.setPrice(Double.parseDouble(priceTextField.getText()));
         myCoupon.setDiscountRate(Double.parseDouble(discountRateTextField.getText()));
         myCoupon.setExpirationDate(Integer.parseInt(expirationDateTextfield.getText()));
-        myCoupon.setCouponStatus(Coupon.UNUSED);
+        myCoupon.setCouponStatus(CouponStatus.Unused);
 
 
         return myCoupon;

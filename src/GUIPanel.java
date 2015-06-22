@@ -94,7 +94,7 @@ public abstract class GUIPanel<T> extends JPanel {
 //            System.out.printf("Coupon name: %s\t adding status: %s\n", coupon.getCouponProviderName(), coup[5]);
 //            if (coup[5].equals("R")) status = CouponStatus.Redeemed;
 //            else status= CouponStatus.Unused;
-            coupon.setCouponStatus(coup[5]);
+            coupon.setCouponStatus(CouponStatus.valueOf(coup[5]));
 
             return coupon;
         }

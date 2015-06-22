@@ -29,6 +29,10 @@ public class SearchGUI extends PurchaseGUI {
     }
 
 
+
+
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -36,12 +40,14 @@ public class SearchGUI extends PurchaseGUI {
         if(((JButton) source).getText().equals(CLEAR)) clearAll();
         else{
             Coupon toSearch = buyCoupon();
+
             boolean contains = GUIPanel.masterList2.contains(toSearch);
             System.out.println("Search result: " + contains);
           if( contains && GUIPanel.masterList2.indexOfFound>=0){
               MyLauncher.Showdialog(String.format("Coupon found in %dth data comparison\n\nCopon: {Provider: %s,\nProduct Name: %s, \nPrice: %.2f,\nDiscount Rate: %.2f,\nExpiratrion Date: %d, \nStatus: %s}",
                       GUIPanel.masterList2.indexOfFound+1, toSearch.getCouponProviderName(), toSearch.getProductName(),toSearch.getPrice(),toSearch.getDiscountRate(), toSearch.getExpirationDate(), toSearch.getStatus().toString()));
           }
+            else MyLauncher.Showdialog("Coupon Not found!");
         }
     }
 }

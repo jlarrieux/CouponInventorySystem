@@ -251,19 +251,19 @@ class UnsortedList<T> implements List<T> {
 
     private boolean checkCouponEquality(Coupon target, Coupon current){
         System.out.println("RUNNIG COUPON CHECK!");
-        boolean providerMatch, productMatch, priceMatch, discountMatch,expirationDateMatch, couponStatusMatch;
+        boolean providerMatch, productMatch, priceMatch, discountMatch,expirationDateMatch;
 
         providerMatch =checkProviderNameMatch(target, current);
         productMatch =checkProductNameMatch(target, current);
         priceMatch = checkPriceMatch(target, current);
         discountMatch = checkDiscountRateMatch(target, current);
         expirationDateMatch = checkExpirationDateMatch(target,current);
-        couponStatusMatch =  checkCouponStatusMatch(target,current);
-        System.out.printf("Provider: %b, Product: %b, Price: %b, discount: %b, expiration: %b, status: %b\n\n",
-                                providerMatch,productMatch,priceMatch,discountMatch,expirationDateMatch,couponStatusMatch);
+
+        System.out.printf("Provider: %b, Product: %b, Price: %b, discount: %b, expiration: %b\n\n",
+                                providerMatch,productMatch,priceMatch,discountMatch,expirationDateMatch);
 
 
-        if( providerMatch && productMatch && priceMatch && discountMatch && expirationDateMatch && couponStatusMatch){
+        if( providerMatch && productMatch && priceMatch && discountMatch && expirationDateMatch){
             return true;
         }
         else return false;
@@ -292,9 +292,6 @@ class UnsortedList<T> implements List<T> {
         return target.getExpirationDate().compareTo(current.getExpirationDate())==0;
     }
 
-    private boolean checkCouponStatusMatch(Coupon target, Coupon current){
-        return target.getStatus()==current.getStatus();
-    }
 
 
 
