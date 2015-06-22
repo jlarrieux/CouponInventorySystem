@@ -32,22 +32,33 @@ public class SearchGUI extends PurchaseGUI {
 
 
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        if(((JButton) source).getText().equals(CLEAR)) clearAll();
-        else{
-            Coupon toSearch = buyCoupon();
-
-            boolean contains = GUIPanel.masterList2.contains(toSearch);
-            System.out.println("Search result: " + contains);
-          if( contains && GUIPanel.masterList2.indexOfFound>=0){
-              MyLauncher.Showdialog(String.format("Coupon found in %dth data comparison\n\nCopon: {Provider: %s,\nProduct Name: %s, \nPrice: %.2f,\nDiscount Rate: %.2f,\nExpiratrion Date: %d, \nStatus: %s}",
-                      GUIPanel.masterList2.indexOfFound+1, toSearch.getCouponProviderName(), toSearch.getProductName(),toSearch.getPrice(),toSearch.getDiscountRate(), toSearch.getExpirationDate(), toSearch.getStatus().toString()));
-          }
-            else MyLauncher.Showdialog("Coupon Not found!");
+        if (((JButton) source).getText().equals(CLEAR)) clearAll();
+        else {
+            if(!checkInputError()) search();
+            else MyLauncher.Showdialog(errorlist);
         }
     }
+
+
+    private void CouponshowDialog(Coupon toSearch) {
+        MyLauncher.Showdialog(String.format("Coupon found in %dth data comparison\n\nCopon: {Provider: %s,\nProduct Name: %s, \nPrice: %.2f,\nDiscount Rate: %.2f,\nExpiratrion Date: %d, \nStatus: %s}",
+                GUIPanel.masterList2.indexOfFound + 1, toSearch.getCouponProviderName(), toSearch.getProductName(), toSearch.getPrice(), toSearch.getDiscountRate(), toSearch.getExpirationDate(), toSearch.getStatus().toString()));
+    }
+
+    private void search(){
+        Coupon toSearch = buyCoupon();
+
+        boolean contains = GUIPanel.masterList2.contains(toSearch);
+        System.out.println("Search result: " + contains);
+        if (contains && GUIPanel.masterList2.indexOfFound >= 0) {
+            CouponshowDialog(toSearch);
+        } else MyLauncher.Showdialog("Coupon Not found!");
+    }
+
+
+
 }
